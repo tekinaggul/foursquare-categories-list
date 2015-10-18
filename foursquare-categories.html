@@ -1,6 +1,7 @@
 <html>
 <head>
     <title></title>
+      <meta charset="utf-8" />
       <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -10,10 +11,15 @@
     <div class="location-categories">
         <ul></ul>
     </div>
-    <input type="button" style="visibility:hidden;" class="locPrev" value="geri">
-    <input type="button" class="locOk" value="tamam">
+    
 </div><!-- yeni yer - end -->
-
+<div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+        <a href="#" id="locPrev" class="btn btn-primary btn-lg locPrev disabled" role="button">Geri</a>
+          <div class="list-group">
+            
+          </div>
+        </div>
 <script type="text/javascript">
 
 
@@ -33,36 +39,33 @@
     });
 
 function loopLocationCat (list) {
-    $(".location-categories ul").children().remove();
+    $(".list-group").children().remove();
     for (var i = 0; i < list.length; i++) {
-        $(".location-categories ul").append("<li id='"+i+"'>"+list[i].name + "<div class='hidden catId'>" + list[i].id + "</div></li>");
+        $(".list-group").append('<a href="#" id="'+i+'" class="list-group-item">'+list[i].name + '</a>');
     };
 }
-$(document).on("click", ".location-categories ul li", function() {
-    $(".location-categories ul li").css("background-color","#fff");
-    $(this).css("background-color","#ccc");
-    $("#catId").val($(this).find('.catId').text());
-    $("#own").val("1");
+$(document).on("click", ".list-group-item", function() {
+    //$(".list-group-item").css("background-color","#fff");
+    //$(this).css("background-color","#ccc");
 });
-$(document).on("dblclick", ".location-categories ul li", function() {
+$(document).on("dblclick", ".list-group-item", function() {
     var sira = $(this).attr("id");
     if (_locationsCategories[sira]["categories"].length > 0) {
-        $('.locPrev').css("visibility","visible");
+        $('#locPrev').removeClass('disabled');
         _prevLocationsCategories.push(_locationsCategories);
         _locationsCategories = _locationsCategories[sira]["categories"]; 
         loopLocationCat (_locationsCategories);
     } else {
-        //alert(0);
-        //$("#location-categories").dialog("close");
+
     };
 });
-$(document).on('click', '.locPrev', function(event) {
+$(document).on('click', '#locPrev', function(event) {
     event.preventDefault();
     if(_prevLocationsCategories.length > 0){
         _locationsCategories = _prevLocationsCategories[_prevLocationsCategories.length-1];
         _prevLocationsCategories.pop();
         if(_prevLocationsCategories.length == 0){
-            $('.locPrev').css("visibility","hidden");
+            $('#locPrev').addClass('disabled');
         }
         loopLocationCat (_locationsCategories);
     }
